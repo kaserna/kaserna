@@ -1,0 +1,42 @@
+import sys
+
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QLabel, QGridLayout
+from PyQt5.QtGui import QPainter, QPixmap, QPen, QColor
+from PyQt5.QtCore import Qt
+from PyQt5 import uic
+from random import randint
+
+
+class RisCircle(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('UI.ui', self)
+        self.Baton.setFixedSize(600, 40)
+        self.Baton.clicked.connect(self.draw)
+
+        self.ris = QLabel()
+        canvas = QPixmap(600, 600)
+        self.ris.setPixmap(canvas)
+
+        layout = QGridLayout(self.centralwidget)
+        layout.addWidget(self.Baton, 5, 0, alignment=Qt.AlignBottom)
+        layout.addWidget(self.ris, 1, 0)
+
+    def draw(self):
+        x, y = [randint(10, 500) for i in range(2)]
+        w, h = [randint(10, 100) for i in range(2)]
+        painter = QPainter(self.ris.pixmap())
+        ruchka = QPen()
+        ruchka.setWidth(3)
+        ruchka.setColor(QColor(255, 255, 0))
+        painter.setPen(ruchka)
+        painter.drawEllipse(x, y, w, h)
+        painter.end()
+        self.update()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    w = RisCircle()
+    w.show()
+    sys.exit(app.exec_())
